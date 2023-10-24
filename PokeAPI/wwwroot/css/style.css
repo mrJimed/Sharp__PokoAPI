@@ -1,0 +1,71 @@
+/* Card
+=============*/
+.card {
+    width: 18rem;
+    margin-bottom: 15px;
+}
+
+.card--fight {
+    margin: 0 35px;
+}
+
+.card--big {
+    width: 25rem;
+}
+
+.card__inner {
+    align-items: center;
+}
+
+.center__cards {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Content
+=============*/
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content--fight {
+    text-align: center;
+}
+
+.content__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* Pagination
+=============*/
+.paginationjs {
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+/* Poce
+=============*/
+.open__poce {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Fight
+=============*/
+.fight__panel {
+    margin-top: 20px;
+    display: flex;
+}
+
+.fight__select {
+    margin-left: 10px;
+}
+
+.fight__history {
+    margin-top: 15px;
+}
