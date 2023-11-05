@@ -29,6 +29,10 @@ builder.Services.AddTransient<IPokeApi, PokeApi>();
 builder.Services.AddSingleton<IFileProvider>(
         new PhysicalFileProvider(
             Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+builder.Services.AddStackExchangeRedisCache(options => {
+    options.Configuration = "localhost";
+    options.InstanceName = "local";
+});
 
 var app = builder.Build();
 
