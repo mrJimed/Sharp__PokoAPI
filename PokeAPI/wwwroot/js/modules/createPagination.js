@@ -20,6 +20,7 @@ function createCard(pokemon) {
                         Attack power: ${pokemon['attackPower']}
                     </p>
                     <button type="button" class="btn btn-dark fight__btn">Select</button>
+                    <button type="button" class="btn btn-dark save__btn">Save</button>
                 </div>
             </div>
         </div>

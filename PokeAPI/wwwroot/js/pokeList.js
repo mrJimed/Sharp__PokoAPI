@@ -5,8 +5,6 @@ $(async function () {
     const CONTAINER_ID = '#pagination'
     const pokemons = await getPokemonList()
 
-    console.log(pokemons)
-
     createPagination(pokemons, CONTAINER_ID)
 
     $('.content__inner').on('click', '.open__poce', function () {
@@ -27,5 +25,22 @@ $(async function () {
             const result = pokemons.filter(poke => poke['name'].startsWith(inputVal))
             createPagination(result, CONTAINER_ID)
         }
+    })
+
+    $('.content__inner').on('click', '.save__btn', async function () {
+        let pokemonName = $(this).closest(".card").find(".card-title").text()
+        let pokemonId = pokemons.find(poke => poke['name'] === pokemonName)['id']
+
+        let response = await fetch(`/api/ftp`, {
+            method: "post",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                id: pokemonId,
+            })
+        })
     })
 })
