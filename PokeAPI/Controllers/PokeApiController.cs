@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using PokeAPI.Models;
 using PokeAPI.Services;
+using System.Security.Claims;
 using System.Web;
 
 namespace PokeAPI.Controllers
@@ -68,6 +70,16 @@ namespace PokeAPI.Controllers
             if (myPokemon != null && enemyPokemon != null)
                 return Ok(pokeApi.PokemonFastFight(myPokemon, enemyPokemon));
             return NotFound();
+        }
+
+        [Authorize]
+        [HttpPost("api/ftp")]
+        public async Task<IActionResult> AddFtp([FromBody] Pokemon pokeData, [FromServices] IFtpService ftpService, [FromServices] IUserService userService)
+        {
+            var pokemon = await pokeApi.GetPokemonInfo(pokeData.Id);
+            var currentUser = await userService.GetUserInfo(User.FindFirstValue(ClaimTypes.Name));
+            await ftpService.SaveMarkdownFile(currentUser.Username, currentUser.Password, pokemon);
+            return Ok();
         }
     }
 }
