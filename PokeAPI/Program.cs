@@ -1,15 +1,27 @@
+using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using PokeAPI.Services;
 using PokeAPI.Services.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
-string connection = builder.Configuration.GetConnectionString("DefaultConnection");
-string emailerLogin = builder.Configuration.GetSection("EmailerSetting").GetSection("login").Value;
-string emailerPassword = builder.Configuration.GetSection("EmailerSetting").GetSection("password").Value;
-string ftpHost = builder.Configuration.GetSection("FtpSettings").GetSection("host").Value;
+
+// Env.Load("Env/.env.local");
+Env.Load("Env/.env.docker");
+
+string redisHost = Environment.GetEnvironmentVariable("REDIS_HOST");
+string redisPort = Environment.GetEnvironmentVariable("REDIS_PORT");
+string emailerLogin = Environment.GetEnvironmentVariable("EMAILER_LOGIN");
+string emailerPassword = Environment.GetEnvironmentVariable("EMAILER_PASSWORD");
+string ftpHost = Environment.GetEnvironmentVariable("FTP_HOST");
+
+string dbHost = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+string dbPort = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+string dbName = Environment.GetEnvironmentVariable("POSTGRES_DATABASE");
+string dbUser = Environment.GetEnvironmentVariable("POSTGRES_USERNAME");
+string dbPassword = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -18,7 +30,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromHours(2);
         options.SlidingExpiration = true;
     });
-builder.Services.AddDbContext<PokeDbContext>(options => options.UseNpgsql(connection));
+builder.Services.AddDbContext<PokeDbContext>(options => options.UseNpgsql($"Host={dbHost};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPassword}"));
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton(provider => new Emailer(emailerLogin, emailerPassword));
@@ -30,7 +42,7 @@ builder.Services.AddSingleton<IFileProvider>(
         new PhysicalFileProvider(
             Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
 builder.Services.AddStackExchangeRedisCache(options => {
-    options.Configuration = "localhost";
+    options.Configuration = $"{redisHost}:{redisPort}";
     options.InstanceName = "local";
 });
 

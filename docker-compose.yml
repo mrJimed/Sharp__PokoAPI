@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  backend:
+    image: mrjimed/backend:lab.6
+    build:
+      context: .
+      dockerfile: PokeAPI/Dockerfile
+    env_file:
+      - ./PokeAPI/Env/.env.docker
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "${REDIS_PORT:-6379}:${REDIS_PORT:-6379}"
+    volumes:
+      - /path/to/local/data:/root/redis
+      - /path/to/local/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PORT=${REDIS_PORT:-6379}
+
+  postgresql:
+    image: postgres:latest
+    restart: always
+    volumes:
+      - pg_project:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
+    command: ["postgres", "-p", "${POSTGRES_PORT:-5432}"]
+    environment:
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+
+volumes:
+  pg_project:
