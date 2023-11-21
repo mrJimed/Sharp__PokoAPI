@@ -54,9 +54,8 @@ namespace PokeAPI.Controllers
         }
 
         [HttpPost("api/pokemon/fight/{attackPower:int}")]
-        public async Task<IActionResult> PokemonAttack(int attackPower)
+        public async Task<IActionResult> PokemonAttack(int attackPower, [FromBody] Pokemon pokemon)
         {
-            var pokemon = await HttpContext.Request.ReadFromJsonAsync<Pokemon>();
             pokemon = pokeApi.PokemonAttack(pokemon, attackPower);
             return Ok(pokemon);
         }

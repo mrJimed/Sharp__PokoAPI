@@ -22,5 +22,6 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 **/PokeAPI/Env
+**/PokeAPI/UnitTests
 LICENSE
 README.md
