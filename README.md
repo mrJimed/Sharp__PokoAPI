@@ -12,3 +12,9 @@ Backend:
 * MailKit
 * Newtonsoft.Json
 * Entity Framework Core
+* DotNetEnv
+
+Tests:
+* XUnit
+* Selenium
+* Moq
