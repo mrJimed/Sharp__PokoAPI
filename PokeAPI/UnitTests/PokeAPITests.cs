@@ -29,8 +29,8 @@ namespace UnitTest
         [Fact]
         public async Task PokemonFastFightViewResultAsync()
         {
-            int myPokeId = 1;
-            int enemyPokeId = 4;
+            var myPokeId = 1;
+            var enemyPokeId = 4;
 
             var pokeList = GetPokemonListTest();
             var mock = new Mock<IPokeApi>();
@@ -45,8 +45,8 @@ namespace UnitTest
         [Fact]
         public async Task PokemonFightViewResultAsync()
         {
-            int myPokeId = 1;
-            int enemyPokeId = 3;
+            var myPokeId = 1;
+            var enemyPokeId = 3;
             var pokeList = GetPokemonListTest();
 
             var mock = new Mock<IPokeApi>();
@@ -61,25 +61,27 @@ namespace UnitTest
         [Fact]
         public async Task PokemonInfoViewResultAsync()
         {
-            int testId = 1;
+            var pokeId = 1;
             var pokeList = GetPokemonListTest();
             var mock = new Mock<IPokeApi>();
-            mock.Setup(pokeApi => pokeApi.GetPokemonInfo(testId)).ReturnsAsync((int id) => pokeList.First(poke => poke.Id == id));
+            mock.Setup(pokeApi => pokeApi.GetPokemonInfo(pokeId)).ReturnsAsync((int id) => pokeList.First(poke => poke.Id == id));
 
             var pokeApiController = new PokeApiController(mock.Object);
-            var result = await pokeApiController.PokemonInfo(testId);
+            var result = await pokeApiController.PokemonInfo(pokeId);
 
             var okResult = Assert.IsType<OkObjectResult>(result);
             var pokemon = Assert.IsAssignableFrom<Pokemon>(okResult.Value);
 
-            Assert.Equal(pokemon, pokeList.First(poke => poke.Id == testId));
+            Assert.Equal(pokemon, pokeList.First(poke => poke.Id == pokeId));
         }
 
         [Fact]
         public async Task RandomPokemonViewResultAsync()
         {
             var pokeList = GetPokemonListTest();
-            int randId = new Random().Next(pokeList.Count);
+            var minId = pokeList.Select(p => p.Id).Min();
+            var maxId = pokeList.Select(p => p.Id).Max();
+            var randId = new Random().Next(minId, maxId + 1);
 
             var mock = new Mock<IPokeApi>();
             mock.Setup(pokeApi => pokeApi.GetRandomPokemon()).ReturnsAsync(() => pokeList.FirstOrDefault(poke => poke.Id == randId));
@@ -97,7 +99,7 @@ namespace UnitTest
         [Fact]
         public async Task PokemonAttackViewResultAsync()
         {
-            int attackPower = 12;
+            var attackPower = 12;
             var pokemon = GetPokemonListTest().First();
 
             var mock = new Mock<IPokeApi>();

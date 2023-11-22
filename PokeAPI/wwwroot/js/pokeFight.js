@@ -40,7 +40,7 @@ $(async function () {
         $('.fight__history').append(`<div><b>Раунд</b>: ${round} <b>${attackingPoke['name']}</b> attacked <b>${attackedPoke['name']}</b><div>`)
         if (attackedPoke['hp'] === 0) {
             $('.attack__btn, .fight__select').prop("disabled", true)
-            $('.fight__history').append(`<div><b>Winner</b> ${attackingPoke['name']}<div>`)
+            $('.fight__history').append(`<div class="fight__history-item"><b>Winner</b> ${attackingPoke['name']}<div>`)
             $('.modal__btn').prop('disabled', false)
             postFightResult(attackingPoke, attackedPoke)
         }

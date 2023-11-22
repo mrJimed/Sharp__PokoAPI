@@ -7,8 +7,8 @@ using PokeAPI.Services.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Env.Load("Env/.env.local");
-Env.Load("Env/.env.docker");
+Env.Load("Env/.env.local");
+//Env.Load("Env/.env.docker");
 
 string redisHost = Environment.GetEnvironmentVariable("REDIS_HOST");
 string redisPort = Environment.GetEnvironmentVariable("REDIS_PORT");
