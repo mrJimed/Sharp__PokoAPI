@@ -79,9 +79,12 @@ namespace PokeAPI.Services
 
         public async Task<Pokemon> GetPokemonInfo(int id)
         {
-            var pokeJson = await cache.GetStringAsync(id.ToString());
-            if (!string.IsNullOrEmpty(pokeJson))
-                return JsonSerializer.Deserialize<Pokemon>(pokeJson);
+            if(cache != null)
+            {
+                var pokeJson = await cache.GetStringAsync(id.ToString());
+                if (!string.IsNullOrEmpty(pokeJson))
+                    return JsonSerializer.Deserialize<Pokemon>(pokeJson);
+            }
             using (var client = new HttpClient())
             {
                 var response = await client.GetAsync($"{API_URL}/{id}");
@@ -99,7 +102,8 @@ namespace PokeAPI.Services
                         Weight = int.Parse((string)pokemonData["weight"]),
                         Image = (string)pokemonData["sprites"]["other"]["official-artwork"]["front_default"]
                     };
-                    await AddCache(pokemon);
+                    if(cache != null)
+                        await AddCache(pokemon);
                     return pokemon;
                 }
                 return null;
