@@ -4,7 +4,9 @@ namespace PokeAPI.Services
 {
     public interface IUserService
     {
-        Task<User?> GetUser(string username, string password);
-        Task<User?> GetUserInfo(string username);
+        User? GetUser(string email);
+        bool IsUserExists(string email);
+        void ChangePassword(string email, string newPassword);
+        void AddUser(string email, string password, byte[] salt);
     }
 }

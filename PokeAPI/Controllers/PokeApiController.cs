@@ -76,8 +76,8 @@ namespace PokeAPI.Controllers
         public async Task<IActionResult> AddFtp([FromBody] Pokemon pokeData, [FromServices] IFtpService ftpService, [FromServices] IUserService userService)
         {
             var pokemon = await pokeApi.GetPokemonInfo(pokeData.Id);
-            var currentUser = await userService.GetUserInfo(User.FindFirstValue(ClaimTypes.Name));
-            await ftpService.SaveMarkdownFile(currentUser.Username, currentUser.Password, pokemon);
+            var currentUser = userService.GetUser(User.Identity.Name);
+            await ftpService.SaveMarkdownFile(currentUser.Email, currentUser.Password, pokemon);
             return Ok();
         }
     }

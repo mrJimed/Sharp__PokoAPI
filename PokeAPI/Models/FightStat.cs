@@ -23,5 +23,8 @@ namespace PokeAPI.Models
 
         [Column("count_rounds")]
         public int CountRounds { get; init; }
+
+        [Column("user_id")]
+        public Guid UserId { get; set; }
     }
 }

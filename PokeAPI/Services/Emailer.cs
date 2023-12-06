@@ -15,16 +15,16 @@ namespace PokeAPI.Services
             this.password = password;
         }
 
-        public async Task SendEmail(FightStatMail mail)
+        public async Task SendEmail(string email, string message, string subject = "")
         {
             using var emailMessage = new MimeMessage();
 
             emailMessage.From.Add(new MailboxAddress("PokeAPI", fromEmail));
-            emailMessage.To.Add(new MailboxAddress("", mail.Email));
-            emailMessage.Subject = "Fight statistic";
+            emailMessage.To.Add(new MailboxAddress("", email));
+            emailMessage.Subject = subject;
             emailMessage.Body = new TextPart("Paint")
             {
-                Text = mail.Message
+                Text = message
             };
 
             using (var client = new SmtpClient())

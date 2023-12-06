@@ -14,16 +14,34 @@ namespace PokeAPI.Services
             this.pokeDb = pokeDb;
         }
 
-        public async Task<User?> GetUserInfo(string username)
+        public User? GetUser(string email)
         {
-            var user = await pokeDb.Users.FirstOrDefaultAsync(u => u.Username.Equals(username));
-            return user;
+            return pokeDb.Users.FirstOrDefault(user => user.Email.Equals(email));
         }
 
-        public async Task<User?> GetUser(string username, string password)
+        public bool IsUserExists(string email)
         {
-            var user = await pokeDb.Users.FirstOrDefaultAsync(u => u.Username.Equals(username) && u.Password.Equals(password));
-            return user;
+            var user = pokeDb.Users.FirstOrDefault(u => u.Email.Equals(email));
+            return user != null;
+        }
+
+        public void AddUser(string email, string password, byte[] salt)
+        {
+            var user = new User() 
+            { 
+                Email = email, 
+                Password = password, 
+                Salt = Convert.ToBase64String(salt)
+            };
+            pokeDb.Users.Add(user);
+            pokeDb.SaveChanges();
+        }
+
+        public void ChangePassword(string email, string newPassword)
+        {
+            var user = GetUser(email);
+            user.Password = newPassword;
+            pokeDb.SaveChanges();
         }
     }
 }
