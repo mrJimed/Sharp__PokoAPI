@@ -2,8 +2,40 @@ import { getPokemonList, getRandomPokemon } from './modules/poke.js'
 import { createPagination } from './modules/createPagination.js'
 
 $(async function () {
+    async function getUser() {
+        let response = await fetch("/current", {
+            method: "GET",
+            headers: { "Accept": "application/json" }
+        })
+        if (response.ok) {
+            let user = await response.json()
+            console.log(user)
+            console.log(user['userName'])
+            return user['userName'] === null ? 'anon' : user['userName']
+        }
+    }
+
     const CONTAINER_ID = '#pagination'
     const pokemons = await getPokemonList()
+
+    const user = await getUser()
+    if (user === 'anon') {
+        $('#logout').hide()
+    } else {
+        $('#login').hide()
+        $('#registration').hide()
+
+        $('#logout').on('click', async function (e) {
+            await fetch("/logout", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            })
+            $('#user').text(` - ${await getUser()}`)
+        })
+
+    }
+
+    $('#user').text(` - ${user}`)
 
     createPagination(pokemons, CONTAINER_ID)
 

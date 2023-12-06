@@ -81,7 +81,8 @@ $(async function () {
 
     $('#password-btn').on('click', async function (event) {
         console.log('PASSWORD')
-        let response = await fetch("/pass-change/", {
+        console.log(`EMAIL: ${$("#email").val() }`)
+        let response = await fetch("/pass-change", {
             method: "POST",
             headers: { "Accept": "application/json", "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -91,7 +92,7 @@ $(async function () {
         if (response.ok)
             console.log('PASS CHANGED')
         else
-        console.log("ERROR")
+            console.log("ERROR")
     })
 
     let token = await yandexInit()
